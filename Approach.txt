@@ -1,0 +1,52 @@
+Approach: 
+
+Step 1 : Load train, test and submission file, prepare submission dataframe for final submission and drop unwanted columnns
+
+#Step 2 : Data Cleaning - 
+a)Repalce column names with space by "_"
+b) Replace "14+" with "15.0"  in column "Holding_Policy_Duration"
+c)Convert Holding_Policy_Duration to float as it is a numerical value
+d)Convert Holding_Policy_Type & Reco_Policy_Cat from numerical to object as they are categorical variables
+
+Step 3: Null Value Imputation
+
+Impute all Null values as "0", as the values are unknown
+
+#Impute Health_Indicator = '0' as it is unknown
+data['Health_Indicator'].value_counts().index[0]
+data['Health_Indicator'].fillna('0', inplace=True)
+test['Health_Indicator'].fillna('0', inplace=True)
+
+#Impute Holding_Policy_Duration = '0.0' as it is unknown
+data['Holding_Policy_Duration'].fillna(0.0, inplace=True)
+test['Holding_Policy_Duration'].fillna(0.0, inplace=True)
+
+#Impute Holding_Policy_Duration = '0' as it is unknown
+data['Holding_Policy_Type'].fillna('0', inplace=True)
+test['Holding_Policy_Type'].fillna('0', inplace=True)
+
+Step 4: EDA (Exploratory Data Analysis)
+Conduct EDA to understand  corelation between variables
+
+Step 5 : Feature Engineering
+a)Create new features by grouping categorical variables and finding min, max, sum, 25p, 75p and mean of the numerical columns
+b) Create bins for all numerical variables : Upper_Age, Reco_Policy_Premium, Holding_Policy_Duration, Region_Code
+
+Step 6: Label Encode train-test & check feature importance 
+a)Segregate train and test
+b)Label encode categorical variables using get_dummies()
+c)Drop target variable from X and copy to y
+d) Check feature Importance - It was found that Region_code is the most important feature i.e. Metropolitan cities like Mumbai have higher medical expenses than small cities like Indore
+
+Step 7: Model Building
+a) Build the model using XGBClassifier
+
+Step 8: Predict class 1 probabilities on actual test dataset and create "CSV" file for final submission
+
+
+Conclusion : Region_code was the most important variable impacting Response.
+
+Metric : ROC_AUC
+Final Score : 75.81%
+
+ 
